@@ -3,7 +3,7 @@ import logging
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from humanoid.models import InitiateInteractionResponse, InteractionResponse
+from humanoid.models import InitiateInteractionResponse, InteractionResponse, InitiateInteractionRequest
 from humanoid.middleware import ErrorHandlingMiddleware
 from humanoid import service
 
@@ -27,13 +27,13 @@ def health_check():
     return {"status": "healthy"}
 
 
-@router.get("/initiate_interaction", response_model=InitiateInteractionResponse)
-def initiate_interaction():
-    return service.initiate_interaction()
+@router.post("/initiate_interaction", response_model=InitiateInteractionResponse)
+async def initiate_interaction(request: InitiateInteractionRequest):
+    return await service.initiate_interaction(request)
 
 
 @router.get("/interact/{session_id}", response_model=InteractionResponse)
-def interact(session_id: str):
-    return service.interact(session_id)
+async def interact(session_id: str):
+    return await service.interact(session_id)
 
 app.include_router(router)

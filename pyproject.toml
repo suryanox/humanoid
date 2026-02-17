@@ -1,0 +1,17 @@
+[project]
+name = "humanoid"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi (>=0.129.0,<0.130.0)",
+    "uvicorn (>=0.41.0,<0.42.0)"
+]
+
+[tool.poetry]
+packages = [{include = "humanoid", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

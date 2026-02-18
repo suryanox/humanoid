@@ -1,6 +1,4 @@
 from litellm import completion
-
-from humanoid.models import InteractionResponse
 from humanoid.prompt_builder import PromptBuilder
 from humanoid.session_context import SessionContext
 from humanoid import cache
@@ -13,8 +11,7 @@ async def talk(context: SessionContext, message: Optional[str] = None) -> str:
 
     response = completion(
         model=context.model,
-        messages=context.history,
-        response_format=InteractionResponse
+        messages=context.history
     )
 
     result_message = response.choices[0].message

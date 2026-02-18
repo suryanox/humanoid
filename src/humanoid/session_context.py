@@ -11,6 +11,7 @@ class SessionContext(BaseModel):
     model: str
     history: list = []
     session_id: str
+    language_code: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     def add_message(self, content: str, role: str):

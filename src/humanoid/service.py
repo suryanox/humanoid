@@ -19,6 +19,7 @@ async def initiate_interaction(request: InitiateInteractionRequest) -> InitiateI
         persona=request.persona,
         context=request.context,
         model=request.model,
+        language_code=request.language_code,
     )
     first_reply = await talk(session_context, message=None)
     return InitiateInteractionResponse(session_id=session_id, first_reply=first_reply)

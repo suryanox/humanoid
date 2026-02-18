@@ -1,6 +1,8 @@
 from typing import Annotated
 
-from pydantic import BaseModel, Field
+import langcodes
+from pydantic import BaseModel, Field, field_validator
+
 
 class InitiateInteractionResponse(BaseModel):
     session_id: str
@@ -16,6 +18,20 @@ class InitiateInteractionRequest(BaseModel):
     persona: Persona
     context: Annotated[str, Field(min_length=20)]
     model: Annotated[str, Field(min_length=1)]
+    language_code: Annotated[str, Field(min_length=2, max_length=10)]
+
+    @field_validator("language_code")
+    @classmethod
+    def validate_language_code(cls, value: str) -> str:
+        try:
+            lang = langcodes.Language.get(value)
+
+            if not lang.language:
+                raise ValueError
+
+            return lang.language
+        except Exception:
+            raise ValueError("Invalid ISO language code")
 
 class InteractionResponse(BaseModel):
     reply: str

@@ -1,15 +1,20 @@
 from litellm import completion
+
+from humanoid.models import InteractionResponse
+from humanoid.prompt_builder import PromptBuilder
 from humanoid.session_context import SessionContext
 from humanoid import cache
 from typing import Optional
 
 async def talk(context: SessionContext, message: Optional[str] = None) -> str:
-    user_message = message or "Hello, how are you?" # TODO: Replace with prompt
-    context.add_message(user_message, "user")
+    user_message = message or PromptBuilder(context).build()
+    role = "system" if message is None else "user"
+    context.add_message(user_message, role)
 
     response = completion(
         model=context.model,
-        messages=context.history
+        messages=context.history,
+        response_format=InteractionResponse
     )
 
     result_message = response.choices[0].message
@@ -18,6 +23,3 @@ async def talk(context: SessionContext, message: Optional[str] = None) -> str:
     await cache.set(context.session_id, context)
 
     return result_message.content
-
-
-
